@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/YBGps.iml" filepath="$PROJECT_DIR$/YBGps.iml" />
+      <module fileurl="file://E:\TrustWork\Work\gitYBGps\YBGps.iml" filepath="E:\TrustWork\Work\gitYBGps\YBGps.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://E:\TrustWork\Work\gitYBGps\app\app.iml" filepath="E:\TrustWork\Work\gitYBGps\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gitYBGps.iml" filepath="$PROJECT_DIR$/gitYBGps.iml" />
       <module fileurl="file://$PROJECT_DIR$/passwordview/passwordview.iml" filepath="$PROJECT_DIR$/passwordview/passwordview.iml" />
+      <module fileurl="file://E:\TrustWork\Work\gitYBGps\passwordview\passwordview.iml" filepath="E:\TrustWork\Work\gitYBGps\passwordview\passwordview.iml" />
     </modules>
   </component>
 </project>
