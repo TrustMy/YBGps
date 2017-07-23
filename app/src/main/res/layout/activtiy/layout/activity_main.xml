@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y30"
+        android:background="#2CAEBE"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:id="@+id/show_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="版本号:0.0"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="24dp"/>
+
+        <TextView
+            android:id="@+id/bo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:text="车速监控报警"/>
+
+
+        <ImageView
+            android:id="@+id/image_menu"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:src="@mipmap/menu"/>
+    </RelativeLayout>
+
+
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/titles"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:minHeight="?attr/actionBarSize"-->
+    <!--app:popupTheme="@style/OverflowMenuStyle"-->
+    <!--android:background="#2CAEBE">-->
+
+
+
+    <!--<TextView-->
+    <!--android:id="@+id/show_version"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="版本号:0.0"-->
+    <!--android:textSize="@dimen/y10"-->
+    <!--android:textColor="#ffffff"-->
+    <!--android:layout_marginLeft="16dp"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textSize="@dimen/y15"-->
+    <!--android:textColor="#ffffff"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:text="车速监控报警"/>-->
+
+
+
+
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+
+    <LinearLayout
+        android:layout_below="@+id/title"
+        android:id="@+id/timexml"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+
+        android:visibility="gone">
+
+        <!--自定义属性-->
+        <com.shengyu.ybgps.tools.time.NumberSwitchView
+            android:id="@+id/hour_number_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text=":"
+            android:textColor="@android:color/black"
+            android:textSize="30dp" />
+
+        <com.shengyu.ybgps.tools.time.NumberSwitchView
+            android:id="@+id/minute_number_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black" />
+
+        <com.shengyu.ybgps.tools.time.NumberSwitchView
+            android:id="@+id/seconds_number_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@android:color/black" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/prompt"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/title"
+
+        android:orientation="horizontal"
+
+        >
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/prompt_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="visible"
+                android:text="未启动电子围栏"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/gps_signal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="GPS信号弱"
+                android:textColor="#ff0000"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/state"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="170dp"
+        android:layout_below="@+id/prompt"
+        android:layout_toRightOf="@+id/timexml"
+        android:layout_toEndOf="@+id/timexml">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/home_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/emoticon_512"/>
+
+            <ImageView
+                android:id="@+id/home_db_status"
+                android:layout_marginLeft="@dimen/x16"
+                android:background="@mipmap/db_true"
+                android:layout_width="@dimen/x30"
+                android:layout_height="@dimen/x30" />
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/state"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="280dp"
+            android:layout_height="34dp"
+            android:text="警告:行程结束后,请手动结束任务!"
+            android:id="@+id/HttpElectronicFence"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/titles"
+            android:background="#ff0000"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            />
+
+        <RelativeLayout
+            android:visibility="visible"
+            android:id="@+id/warning"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="50dp"
+            >
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/chaosu"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="4dp"
+                android:visibility="invisible"
+                android:src="@mipmap/error_4_512"/>
+            <TextView
+                android:id="@+id/chaosu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="#2CAEBE"
+                android:textSize="@dimen/y30"
+                android:visibility="invisible"
+                android:text="您已超速!"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/text2"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@+id/btn"
+        android:layout_height="160dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="6dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="4dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/alarm_clock_3_512"/>
+            <TextView
+                android:id="@+id/totime"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="6dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/home_speed_bg"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="@dimen/y15"
+                android:gravity="center"
+                android:text="0时0分0秒"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="6dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="6dp"
+                android:layout_height="match_parent"
+                android:src="@mipmap/speed"/>
+            <TextView
+                android:id="@+id/GRS"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="6dp"
+                android:gravity="center"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/home_speed_bg"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="@dimen/y15"
+                android:text="0公里/时"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/start"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_login_bg"
+            android:onClick="onStartButton"
+            android:textColor="#ffffff"
+            android:text="开始"/>
+        <Button
+            android:id="@+id/end"
+            android:layout_width="0dp"
+            android:onClick="onStopButton"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:background="@drawable/btn_login_bg"
+            android:text="结束"/>
+
+    </LinearLayout>
+
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Start"-->
+    <!--android:id="@+id/startButton"-->
+    <!--android:layout_marginBottom="79dp"-->
+    <!--android:minHeight="40dp"-->
+    <!--android:minWidth="80dp"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_marginLeft="57dp"-->
+    <!--android:textSize="24sp"-->
+    <!--android:onClick="onStartButton" />-->
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Stop"-->
+    <!--android:id="@+id/stopButton"-->
+    <!--android:minWidth="80dp"-->
+    <!--android:minHeight="40dp"-->
+    <!--android:layout_alignTop="@+id/startButton"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_marginRight="57dp"-->
+    <!--android:textSize="24sp"-->
+    <!--android:onClick="onStopButton" />-->
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Register"-->
+    <!--android:id="@+id/registerButton"-->
+    <!--android:minHeight="40dp"-->
+    <!--android:minWidth="80dp"-->
+    <!--android:textSize="24sp"-->
+    <!--android:onClick="onRegisterButton"-->
+    <!--android:layout_below="@+id/stopButton"-->
+    <!--android:layout_toRightOf="@+id/startButton" />-->
+
+</RelativeLayout>
+
