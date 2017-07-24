@@ -331,6 +331,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
                     map.put("lon",gpsLocation.getLongitude() );
                     map.put("alt",gpsLocation.getAltitude());
                     map.put("speed",speed);
+                    map.put("carSerialNumber",CaConfig.carSerialNumber);
                     map.put("bear",gpsLocation.getBearing());
                     map.put("bear",EngineStatus.ACC_ON.value());
                     map.put("gpsTime",TimeTool.getGPSNumTime(gpsLocation.getTime()));
@@ -354,7 +355,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
                     gpsMap.put("speed",speed);
                     gpsMap.put("bear",gpsLocation.getBearing());
                     gpsMap.put("EngineStatus",EngineStatus.ACC_ON.value());
-                    gpsMap.put("gpsTime",TimeTool.getGPSNumTime(gpsLocation.getTime() - day));
+                    gpsMap.put("gpsTime",TimeTool.getGPSNumTime(gpsLocation.getTime() ));
                     SaveDate(CaConfig.typeGPS,TimeTool.getSystemTimeDate(),gpsMap);
 
                     L.d("alarmMessage in  gps message  send Success !!!!!");
@@ -387,7 +388,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
                 map.put("speed",speed);
                 map.put("bear",gpsLocation.getBearing());
                 map.put("EngineStatus",EngineStatus.ACC_ON.value());
-                map.put("gpsTime",TimeTool.getGPSNumTime(gpsLocation.getTime() - day));
+                map.put("gpsTime",TimeTool.getGPSNumTime(gpsLocation.getTime() ));
                 SaveDate(CaConfig.typeGPS,TimeTool.getSystemTimeDate(),map);
             }
 
@@ -712,6 +713,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
 
         map.put("status",status);
         map.put("carSerialNumber",CaConfig.carSerialNumber);
+        L.d("保存的车架号:"+CaConfig.carSerialNumber);
         if(CaConfig.tag != null){
             map.put("tag",CaConfig.tag);
         }
@@ -756,6 +758,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
 
                         IsFirst = true;//恢复表示
                         CaConfig.carSerialNumber = null;
+                        dbManagerTrust.deleteTrip();
                         L.d("clear");
                     }
                 });

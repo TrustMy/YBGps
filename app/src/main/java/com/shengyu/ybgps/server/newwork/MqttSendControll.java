@@ -106,12 +106,14 @@ public class MqttSendControll {
         if(!MqttCommHelper.doConnect){
             synchronized (this) {
                 TypeBean typeBean = dbManagerTrust.selectFirst();
+
                 if (typeBean != null) {
+                    L.d("MqttSendControll SerialNo:" + SerialNo + "|rawId:" + rawId + "|typeBean.getSerialNos():"
+                            + typeBean.getSerialNos() + "|typeBean.getRawId():" + typeBean.getRawId());
                     if (SerialNo != typeBean.getSerialNos() && rawId != typeBean.getRawId()) {
                         SerialNo = typeBean.getSerialNos();
                         rawId = typeBean.getRawId();
-                        L.d("MqttSendControll SerialNo:" + SerialNo + "|rawId:" + rawId + "|typeBean.getSerialNos():"
-                                + typeBean.getSerialNos() + "|typeBean.getRawId():" + typeBean.getRawId());
+
                         if (SerialNo != null) {
                             L.d("MqttSendControll  SerialNo:" + SerialNo + "|rawId:" + rawId);
                             mqttCheackType.sendMessage(typeBean);
@@ -123,6 +125,7 @@ public class MqttSendControll {
                     }
                 } else {
                     dbManagerTrust.clearRawId();
+                    clearSerialNo();
                     L.e("typeBean == null");
                 }
             }

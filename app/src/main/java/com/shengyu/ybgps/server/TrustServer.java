@@ -110,7 +110,6 @@ public class TrustServer extends Service {
     }
 
     public void startWork(){
-
         if (mqttCommHelper.workStatus) {
 
             L.i("Service is alreay in working status");
@@ -175,9 +174,9 @@ public class TrustServer extends Service {
         }else{
             L.d("保存为null");
             message.arg1 = 0;//没有 提示点变绿
+            mqttSendControll.clearSerialNo();
             if(!GpsHelper.gpsStarted){
                 L.d("没有工作 数据库没有数据");
-
             }
         }
         mainHandler.sendMessage(message);

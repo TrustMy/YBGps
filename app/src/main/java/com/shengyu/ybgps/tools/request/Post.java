@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -104,12 +105,12 @@ public class Post {
             @Override
             public void onFailure(Call call, IOException e) {
                 L.e("error:"+e.toString());
-//                L.e("onFailure:"+e.toString());
-//                Map<String,Object> map = new WeakHashMap<>();
-//                map.put("status",false);
-//                map.put("err", TrustException.getException(e));
-//                JSONObject json = new JSONObject(map);
-//                sendMessage(json.toString(),Config.ERROR,type);
+                L.e("onFailure:"+e.toString());
+                Map<String,Object> map = new WeakHashMap<>();
+                map.put("status",false);
+                map.put("err", "请检查当前网络!");
+                JSONObject json = new JSONObject(map);
+                sendMessage(json.toString(),CaConfig.ERROR,type);
 
             }
 

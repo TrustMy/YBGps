@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,16 +25,19 @@ import com.shengyu.ybgps.tools.L;
 
 public class DialogTools implements PasswordView.PasswordListener, View.OnClickListener{
     PasswordView passwordView;
-    EditText editText;
+//    EditText editText;
     Dialog dialog;
     public  void showSerialNumber(Activity activity){
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_serial_number,null);
-//        passwordView = (PasswordView) view.findViewById(R.id.passwordView);
-        editText = (EditText) view.findViewById(R.id.ed);
+        passwordView = (PasswordView) view.findViewById(R.id.passwordView);
+//        editText = (EditText) view.findViewById(R.id.ed);
         Button btnChangeMode = (Button) view.findViewById(R.id.btn_change_mode);
+        Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
         dialog = new Dialog(activity, R.style.customDialog);
         btnChangeMode.setOnClickListener(this);
-//        passwordView.setPasswordListener(this);
+        btnCancel.setOnClickListener(this);
+        passwordView.setPasswordListener(this);
+
         dialog.setContentView(view);
 //          dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
@@ -53,16 +58,29 @@ public class DialogTools implements PasswordView.PasswordListener, View.OnClickL
     public void onClick(View view) {
         int viewId = view.getId();
         if (viewId == R.id.btn_change_mode) {
-            String msg = editText.getText().toString().toString();
-            if (msg == null || msg.equals("")) {
-                Toast.makeText(BaseActivty.context, "输入错误", Toast.LENGTH_SHORT).show();
-            }else{
-                if(CaConfig.carSerialNumber == null){
-                    CaConfig.carSerialNumber = msg;
-                    dialogInterface.working(true);
+            StringBuffer stringBuffer = new StringBuffer();
+
+            for (String c : passwordView.password) {
+                if (TextUtils.isEmpty(c)) {
+                    continue;
                 }
+                stringBuffer.append(c);
             }
-//            passwordView.setMode(passwordView.getMode() == PasswordView.Mode.RECT ? PasswordView.Mode.UNDERLINE : PasswordView.Mode.RECT);
+
+            Log.d("lhh", "getPassword: "+stringBuffer.toString()+"|stringBuffer.length():"+stringBuffer.length());
+            if(stringBuffer.length() >= 6){
+                    String msg = stringBuffer.toString();
+                    CaConfig.carSerialNumber = msg;
+                L.d("carSerialNumber:"+CaConfig.carSerialNumber);
+                passwordView.dissPassView();
+                dialogInterface.working(true);
+
+            }else{
+                Toast.makeText(BaseActivty.context, "输入有误!", Toast.LENGTH_SHORT).show();
+            }
+        }else if(viewId == R.id.btn_cancel){
+            passwordView.dissPassView();
+            dissDialog();
         }
     }
 

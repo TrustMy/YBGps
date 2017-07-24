@@ -130,7 +130,7 @@ public class DBManagerTrust <T extends TypeBean> {
 
 
     public void deleteTrip() {
-        dbWrit.delete("Trip","trip = ?",new String[]{"trip"});
+        dbWrit.execSQL(" delete from Trip");
     }
 
 

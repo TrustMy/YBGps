@@ -69,7 +69,7 @@ public class MqttCheackType {
         TypeAlarmBean bean = (TypeAlarmBean) typeBean;
 //        String alrm = "ALARM;9;3733887419;1181;20170704124141,29.621736,106.580213;4;1,68.45352;;;;;;;;;;;;;;;";
 
-        String alarm = "ALARM;"+bean.getSerialNo()+";"+bean.getTerminalId()+";"+bean.getDriver()+
+        String alarm = "ALARM;"+bean.getSerialNos()+";"+bean.getCarSerialNumber()+";"+bean.getDriver()+
                 ";"+bean.getGpsTime()+","+bean.getLat()+","+bean.getLon()+";4;1,"+bean.getSpeed()+";;;;;;;;;;;;;;;";
         L.d("生成的 alarm:"+alarm);
         return alarm;

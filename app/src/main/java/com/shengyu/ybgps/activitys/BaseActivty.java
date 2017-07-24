@@ -16,6 +16,7 @@ import com.shengyu.ybgps.tools.L;
 import com.shengyu.ybgps.tools.T;
 import com.shengyu.ybgps.tools.bean.ElectronicFenceJsonBean;
 import com.shengyu.ybgps.tools.bean.ErrorResultBean;
+import com.shengyu.ybgps.tools.bean.ResultBean;
 import com.shengyu.ybgps.tools.interfaces.ResultCallBack;
 import com.shengyu.ybgps.tools.request.Get;
 import com.shengyu.ybgps.tools.request.Post;
@@ -91,6 +92,9 @@ public abstract class BaseActivty extends AppCompatActivity {
 
     public void errorCallBeack(Object bean,int type){
 
+        if(type == CaConfig.loginTag){
+            showErrorToast(bean.toString(),3);
+        }
     }
 
 

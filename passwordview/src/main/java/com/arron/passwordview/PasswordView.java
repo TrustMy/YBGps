@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +47,7 @@ public class PasswordView extends View {
     private int cipherTextSize;//密文符号大小
     private boolean cipherEnable;//是否开启密文
     private static String CIPHER_TEXT = "*"; //密文符号
-    private String[] password;//密码数组
+    public String[] password;//密码数组
     private InputMethodManager inputManager;
     private PasswordListener passwordListener;
     private Paint paint;
@@ -283,6 +284,7 @@ public class PasswordView extends View {
      */
     private String getPassword() {
         StringBuffer stringBuffer = new StringBuffer();
+        Log.d("lhh", "getPassword: "+stringBuffer.toString());
         for (String c : password) {
             if (TextUtils.isEmpty(c)) {
                 continue;
@@ -400,6 +402,7 @@ public class PasswordView extends View {
              */
             requestFocus();
             inputManager.showSoftInput(this, InputMethodManager.SHOW_FORCED);
+
             return true;
         }
         return super.onTouchEvent(event);
@@ -515,5 +518,9 @@ public class PasswordView extends View {
             state = bundle.getParcelable("superState");
         }
         super.onRestoreInstanceState(state);
+    }
+
+    public void dissPassView(){
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(),0);
     }
 }

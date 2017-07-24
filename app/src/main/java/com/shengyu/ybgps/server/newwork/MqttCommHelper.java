@@ -167,8 +167,9 @@ public class MqttCommHelper {
             arg1.printStackTrace();
             // 连接失败，重连
             L.e("connection onFailure :"+arg1.toString());
-            /*
             mqttSendControll.errorSend();
+            /*
+
             if(workStatus){
                 mqttSendControll.sendMessage();
             }
@@ -234,8 +235,6 @@ public class MqttCommHelper {
                         e.printStackTrace();
                     }
                 }
-
-
             }
         }
     }

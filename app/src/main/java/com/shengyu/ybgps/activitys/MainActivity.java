@@ -354,6 +354,13 @@ public class MainActivity extends BaseActivty {
                 L.d("error : dbIsWorking:"+dbIsWorking);
             }
 
+            if(checkTerminalId()){
+                L.d("连接mqtt");
+                trustServer.reConnection();
+            }else{
+//                Toast.makeText(MainActivity.this, "请确保您的手机卡是否插好、是否处于飞行模式状态..", Toast.LENGTH_LONG).show();
+            }
+
         }
 
         @Override
@@ -367,15 +374,15 @@ public class MainActivity extends BaseActivty {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        if(trustServer == null){
+            bindService(new Intent(MainActivity.this,TrustServer.class),serviceConnection, Context.BIND_AUTO_CREATE);
+        }
         DBManagerTrust t = new DBManagerTrust<>(context);
         t.selectAllGps();
 //        TypeBean bean = t.selectFirst();
 //        L.d("bean:"+bean.getSerialNos()+"|rawId:"+bean.getRawId());
 
-        if(trustServer == null){
-            bindService(new Intent(MainActivity.this,TrustServer.class),serviceConnection, Context.BIND_AUTO_CREATE);
-        }
+
         rlTopBar = (RelativeLayout) findViewById(R.id.title);
         iniView();
         iniDate();
@@ -431,7 +438,10 @@ public class MainActivity extends BaseActivty {
             @Override
             public void working(boolean status) {
                 if (status) {
-                    checkTerminalId();
+                    if(checkTerminalId()){
+                        trustServer.startWork();
+                        startGps();
+                    }
                     dialogTools.dissDialog();
                 }
             }
@@ -458,11 +468,13 @@ public class MainActivity extends BaseActivty {
 
         CaConfig.terminalId = Long.parseLong("020742686600");
         */
+
+
     }
 
     public void onStartButton(View v){
         dialogTools.showSerialNumber(activity);
-//        checkTerminalId();
+
     }
 
 
@@ -560,7 +572,7 @@ public class MainActivity extends BaseActivty {
 
 
 
-    private void checkTerminalId() {
+    private boolean checkTerminalId() {
         //循环读取 terminalId  有的手机读取一次有可能读取不到
         for (int i = 0; i < 10 && terminalId == null; i++)
         {
@@ -581,11 +593,14 @@ public class MainActivity extends BaseActivty {
             if (terminalId == null  || !terminalId.equals(terminalIdOld) || TrustCheckConfig.getAirplaneMode(activity))
             {
                 Toast.makeText(MainActivity.this, "请确保您的手机卡是否插好、是否处于飞行模式状态..", Toast.LENGTH_LONG).show();
+                return false;
             }else{
-                startGps();
+
+                return true;
             }
         }else{
             L.e("terminalIdOld == null");
+            return false;
         }
 
     }
@@ -658,7 +673,7 @@ public class MainActivity extends BaseActivty {
         promptTv.setVisibility(View.VISIBLE);
         promptTv.setText("未启动电子围栏");
         time();
-        trustServer.startWork();
+
     }
 
 

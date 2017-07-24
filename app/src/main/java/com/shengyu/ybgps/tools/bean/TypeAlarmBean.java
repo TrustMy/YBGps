@@ -29,6 +29,19 @@ public class TypeAlarmBean extends TypeBean {
     private int driver;
     private double lat;
     private int type;
+    private String carSerialNumber;
+
+    public void setSerialNo(long serialNo) {
+        this.serialNo = serialNo;
+    }
+
+    public String getCarSerialNumber() {
+        return carSerialNumber;
+    }
+
+    public void setCarSerialNumber(String carSerialNumber) {
+        this.carSerialNumber = carSerialNumber;
+    }
 
     public void setLon(double lon) {
         this.lon = lon;

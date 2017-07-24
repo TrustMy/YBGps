@@ -41,6 +41,9 @@ public class AndroidPermissionTool extends Activity{
                                 new String[]{Manifest.permission.READ_PHONE_STATE ,
                                         Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.ACCESS_FINE_LOCATION},1);
+                    }else{
+                        LoginActivity.status = true;
+                        L.d("permission success");
                     }
                 }
             }

@@ -137,6 +137,8 @@ public class LoginActivity extends BaseActivty {
         }
     }
 
+
+
     public void onExt(View view){
         finish();
     }
@@ -151,6 +153,7 @@ public class LoginActivity extends BaseActivty {
                 if(grantResults.length > 0 ){
                     for (int i = 0; i < grantResults.length; i++) {
                         if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            status = false;
                             break;
                         }else{
                             status = true;
