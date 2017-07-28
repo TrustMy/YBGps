@@ -37,7 +37,7 @@ public class Post {
     private Request.Builder builder;
     private ResultCallBack resultCallBack;
     private Gson gson;
-    private String error = "服务器返回为空!";
+    private String error = "连接异常!";
     private Activity activity;
     public Post(Activity activity, ResultCallBack resultCallBack) {
         this.activity  = activity;
@@ -108,10 +108,10 @@ public class Post {
                 L.e("onFailure:"+e.toString());
                 Map<String,Object> map = new WeakHashMap<>();
                 map.put("status",false);
-                map.put("err", "请检查当前网络!");
+                map.put("message", "请检查当前网络!");
                 JSONObject json = new JSONObject(map);
-                sendMessage(json.toString(),CaConfig.ERROR,type);
-
+                ErrorResultBean errorResultBean = gson.fromJson(json.toString(),ErrorResultBean.class);
+                sendMessage(errorResultBean.getMessage(),CaConfig.ERROR,type);
             }
 
             @Override
@@ -123,24 +123,24 @@ public class Post {
                     if(json != null && !json.equals("")){
                         ResultBean bean = gson.fromJson(json, ResultBean.class);
                         if(bean!=null && bean.getStatus()){
-                            sendMessage(bean, type,CaConfig.SUCCESS);
+                            sendMessage(bean, CaConfig.SUCCESS,type);
                         }else{
                             if(bean == null){
-                                sendMessage(error,type,CaConfig.ERROR);
+                                sendMessage(error,CaConfig.ERROR,type);
                             }else{
                                 ErrorResultBean errorResultBean = gson.fromJson(json,ErrorResultBean.class);
                                 if(errorResultBean !=null){
-                                    sendMessage(errorResultBean.getMessage(),type,CaConfig.ERROR);
+                                    sendMessage(errorResultBean.getMessage(),CaConfig.ERROR,type);
                                 }else{
-                                    sendMessage(error,type,CaConfig.ERROR);
+                                    sendMessage(error,CaConfig.ERROR,type);
                                 }
                             }
                         }
                     }else{
-                        sendMessage(error,type,CaConfig.ERROR);
+                        sendMessage(error,CaConfig.ERROR,type);
                     }
                 }else{
-                    sendMessage("错误code:"+response.code(),type,CaConfig.ERROR);
+                    sendMessage("错误code:"+response.code(),CaConfig.ERROR,type);
                 }
             }
         });
@@ -152,7 +152,7 @@ public class Post {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                resultCallBack.CallBeck(result,status,type);
+                resultCallBack.CallBeck(result,type,status);
             }
         });
 

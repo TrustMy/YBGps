@@ -10,6 +10,8 @@ import com.shengyu.ybgps.server.TrustServer;
 import com.shengyu.ybgps.tools.L;
 import com.shengyu.ybgps.tools.bean.TypeBean;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import java.util.LinkedList;
 
 /**
@@ -139,6 +141,24 @@ public class MqttSendControll {
                 L.e("mqttSend  reConnection");
             }
         }
+    }
 
+
+
+    public void getPush(String topic,MqttMessage message){
+        String msg = new String(message.getPayload());
+        L.d("arrived msg:"+msg);
+        if(topic.equals("changan_yubei_1180")){
+
+            if(!msg.isEmpty()){
+                L.d("arrived msg:"+msg);
+                String dbConfigData = dbManagerTrust.selectConfigData();
+                if (dbConfigData != null) {
+                    dbManagerTrust.updateConfigData(msg);
+                }else{
+                    dbManagerTrust.addConfigDate(msg);
+                }
+            }
+        }
     }
 }

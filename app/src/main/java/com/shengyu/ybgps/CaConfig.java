@@ -42,7 +42,7 @@ public class CaConfig {
 
     public static float version;
 
-    public static int maxSpeed = 2;//超速60
+    public static float maxSpeed = 60;//超速60
 
     public static ElectronicFenceJsonBean electronicFenceJsonBean;
     public static String tag;
@@ -73,8 +73,8 @@ public class CaConfig {
 
     public static int autoClose = 30 * 5;//自动关闭的条件  gps是2s一刷 30是一分钟   autoClose 5分钟后停止
 
-    public static final  long DelayLoopQueryTime = 60000  *1;//10分钟查询一次
-    public static final  long DelayEndTime = 1000 * 60 * 5;//5分钟后 结束按钮可点击
+    public static final  long DelayLoopQueryTime = 60000  *1;//1分钟查询一次
+    public static   int DelayEndTime =  5;//5分钟后 结束按钮可点击
 
 
     public static final  long StartAutoCloseDelay = 1000 * 60 * 10;//延迟10分钟后开始电子围栏
@@ -94,10 +94,10 @@ public class CaConfig {
     topicTrip = "data/trip";
 
 
-    public static final String login = "http://180.168.194.98:7888/CAWebserver-0.1/registry/reg";
-    public static final String updateApp = "http://139.196.229.233/changan/update.xml";
-    public static final String url_electronic_fence_json = "http://carlinkcn.com:8080/CAWebserver-0.1/rest/circleFences";
-    public static final String uir_set_version = "http://139.196.229.233:8080/CAWebserver-0.1/rest/drivers/updateAppVersion/";
+    public static  String login = "http://180.168.194.98:7888/CAWebserver-0.1/registry/reg";
+    public static  String updateApp = "http://139.196.229.233/changan/update.xml";
+    public static  String url_electronic_fence_json = "http://carlinkcn.com:8080/CAWebserver-0.1/rest/circleFences";
+    public static  String uir_set_version = "http://139.196.229.233:8080/CAWebserver-0.1/rest/drivers/updateAppVersion/";
 
 
 

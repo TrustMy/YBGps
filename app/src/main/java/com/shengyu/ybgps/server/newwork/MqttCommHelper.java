@@ -35,7 +35,6 @@ public class MqttCommHelper {
 
     public static boolean pushStatus = false;
 
-
     public static boolean doConnect = true;
 
 
@@ -47,8 +46,9 @@ public class MqttCommHelper {
     protected String name ;
     protected String passWord ;
     protected String myTopic = CaConfig.topicSubscription;
-    protected String clientId = "020742686600";
-
+    protected String clientId ;
+    protected String [] topics ;
+    protected int[] qoss = {1,1};
     protected Context context;
 
     public MqttCommHelper(Context context) {
@@ -83,8 +83,7 @@ public class MqttCommHelper {
                 client.setCallback(mqttCallback);
 
                 conOpt = new MqttConnectOptions();
-                // 清除缓存
-                conOpt.setCleanSession(true);
+
                 // 设置超时时间，单位：秒
                 conOpt.setConnectionTimeout(10);
                 // 心跳包发送间隔，单位：秒
@@ -93,7 +92,10 @@ public class MqttCommHelper {
                 conOpt.setUserName(name);
                 // 密码
                 conOpt.setPassword(passWord.toCharArray());
-
+                //设置保存session 接收离线消息
+                conOpt.setCleanSession(false);
+                //自动重连
+//                conOpt.setAutomaticReconnect(true);
                 // last will message
 
                 String message = "{\"terminal_uid\":\"" + clientId + "\"}";
@@ -119,8 +121,8 @@ public class MqttCommHelper {
 
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
-            String msg = new String(message.getPayload());
-            L.d("arrived msg:"+msg);
+            mqttSendControll.getPush(topic,message);
+            L.d("messageId:"+client.acknowledgeMessage(message.getId()+""));
         }
 
         @Override
@@ -128,13 +130,14 @@ public class MqttCommHelper {
             L.d("deliveryComplete : success");
             pushStatus = false;
             mqttSendControll.successSend();
+
         }
 
         @Override
         public void connectionLost(Throwable arg0) {
             // 失去连接，重连
             doConnect = true;
-            L.e("connectionLost error : "+arg0.toString());
+            L.e("connectionLost error : "+arg0.getMessage());
             mqttSendControll.errorSend();
 //            if(workStatus){
 //                mqttSendControll.sendMessage();
@@ -152,11 +155,14 @@ public class MqttCommHelper {
             doConnect = false;
             try {
                 // 订阅myTopic话题
-                client.subscribe(myTopic,1);
+//                client.subscribe(myTopic,1);
+                client.subscribe(topics,qoss);
+                L.d("订阅主题:"+topics[0]);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
-            L.d(" mqtt connection success");
+            L.d(" mqtt connection success conOpt.isAutomaticReconnect():"+conOpt.isAutomaticReconnect());
+
             mqttSendControll.clearSerialNo();
             mqttSendControll.sendMessage();
             clearHandler();
@@ -166,7 +172,7 @@ public class MqttCommHelper {
         public void onFailure(IMqttToken arg0, Throwable arg1) {
             arg1.printStackTrace();
             // 连接失败，重连
-            L.e("connection onFailure :"+arg1.toString());
+            L.e("connection onFailure :"+arg1.getMessage());
             mqttSendControll.errorSend();
             /*
 
@@ -174,7 +180,6 @@ public class MqttCommHelper {
                 mqttSendControll.sendMessage();
             }
             */
-
 
         }
     };
@@ -207,7 +212,6 @@ public class MqttCommHelper {
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         if (info != null && info.isAvailable()) {
             String name = info.getTypeName();
-
             L.i("Mqtt intentType:"+name);
             return true;
         } else {
@@ -248,9 +252,6 @@ public class MqttCommHelper {
             e.printStackTrace();
         }
     }
-
-
-
 
     public void setWorkStatus(boolean workStatus) {
         this.workStatus = workStatus;

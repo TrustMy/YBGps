@@ -238,5 +238,44 @@ public class DBManagerTrust <T extends TypeBean> {
         dbWrit.execSQL("DELETE FROM sqlite_sequence WHERE name = 'Gps'");
     }
 
+    /**
+     * system Config
+     */
+
+    public void addConfigDate(String msg){
+        contentValues.put("data",msg);
+        dbWrit.insert("Config",null,contentValues);
+        L.d("addConfigDate:"+msg);
+        contentValues.clear();
+    }
+
+    public String selectConfigData(){
+        String data = null;
+        Cursor cursor = dbWrit.query("Config",null,null,null,null,null,null);
+        if(cursor.moveToFirst()){
+            do {
+
+                data = cursor.getString(cursor.getColumnIndex("data"));
+
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        if(data == null){
+            L.d("data == null");
+            return null;
+        }else{
+            L.d("selectConfigData:"+data);
+            return data;
+        }
+    }
+
+    public void updateConfigData(String msg){
+        contentValues.put("data",msg);
+        dbWrit.update("Config",contentValues,"data = ?",
+                new String[]{"data"});
+        L.d("updateConfigData:"+msg);
+        contentValues.clear();
+
+    }
 
 }

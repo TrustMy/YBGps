@@ -66,11 +66,17 @@ public class TrustServer extends Service {
     @Override
     public void onCreate() {
 //        initMqtt();
-        mqttCheackType = new MqttCheackType(this);
-        mqttCommHelper =  new CAMqttCommHelper(context);
-        mqttSendControll = new MqttSendControll(mqttCheackType,this);
-        mqttCommHelper.setMqttSendControll(mqttSendControll);
+
         gpsHelper = new GpsHelper(mqttCheackType);
+        Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
+                mqttCheackType = new MqttCheackType(TrustServer.this);
+                mqttCommHelper =  new CAMqttCommHelper(context);
+                mqttSendControll = new MqttSendControll(mqttCheackType,TrustServer.this);
+                mqttCommHelper.setMqttSendControll(mqttSendControll);
+            }
+        }).subscribe();
         threadPool.execute(gpsHelper);
         try {
             Thread.sleep(1000);
@@ -87,8 +93,6 @@ public class TrustServer extends Service {
         Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Object> e) throws Exception {
-//                mqttCommHelper.initMqtt();
-//                e.onNext(mqttCommHelper);
                 mqttSendControll.sendMessage();
             }
         }).subscribe();

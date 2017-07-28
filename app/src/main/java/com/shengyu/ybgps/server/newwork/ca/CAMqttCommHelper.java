@@ -2,8 +2,10 @@ package com.shengyu.ybgps.server.newwork.ca;
 
 import android.content.Context;
 
+import com.shengyu.ybgps.CaConfig;
 import com.shengyu.ybgps.server.newwork.MqttCommHelper;
 import com.shengyu.ybgps.tools.L;
+import com.shengyu.ybgps.tools.TimeTool;
 import com.shengyu.ybgps.tools.TrustSharedPreferences;
 
 
@@ -28,10 +30,10 @@ public class CAMqttCommHelper extends MqttCommHelper {
             host = "tcp://" + mainserver;
             name = userName;
             passWord = pwd;
+            clientId = CaConfig.terminalId!=0?CaConfig.terminalId+"": TimeTool.getSystemTimeDate()+"";
+            topics  = new String[]{name};
 
             initMqtt();
         }
     }
-
-
 }

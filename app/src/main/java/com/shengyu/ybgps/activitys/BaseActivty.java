@@ -11,9 +11,12 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.shengyu.ybgps.CaConfig;
+import com.shengyu.ybgps.database.DBHelperTrust;
+import com.shengyu.ybgps.database.DBManagerTrust;
 import com.shengyu.ybgps.tools.AndroidPermissionTool;
 import com.shengyu.ybgps.tools.L;
 import com.shengyu.ybgps.tools.T;
+import com.shengyu.ybgps.tools.bean.ConfigBean;
 import com.shengyu.ybgps.tools.bean.ElectronicFenceJsonBean;
 import com.shengyu.ybgps.tools.bean.ErrorResultBean;
 import com.shengyu.ybgps.tools.bean.ResultBean;
@@ -21,7 +24,10 @@ import com.shengyu.ybgps.tools.interfaces.ResultCallBack;
 import com.shengyu.ybgps.tools.request.Get;
 import com.shengyu.ybgps.tools.request.Post;
 
+import org.json.JSONObject;
+
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Created by Trust on 2017/7/14.
@@ -31,7 +37,7 @@ public abstract class BaseActivty extends AppCompatActivity {
     protected Post post;
     protected Get get;
     public static Activity activity ;
-    public static Context context ;
+    public static Context context;
     public ResultCallBack resultCallBack = new ResultCallBack() {
         @Override
         public void CallBeck(Object obj, int type, int status) {
@@ -39,6 +45,8 @@ public abstract class BaseActivty extends AppCompatActivity {
         }
     };
 
+    private DBHelperTrust dbHelperTrust;
+    private DBManagerTrust dbManagerTrust ;
 
     private  SharedPreferences.Editor setJson;//保存电子围栏
 
@@ -49,15 +57,39 @@ public abstract class BaseActivty extends AppCompatActivity {
     }
 
     private  void iniDate(){
-
         context =  BaseActivty.this;
+        dbHelperTrust = new DBHelperTrust(context);
+        dbManagerTrust = new DBManagerTrust(context);
         post = new Post(this,resultCallBack);
         get = new Get(resultCallBack);
         setJson = context.getSharedPreferences("rlog", Activity.MODE_PRIVATE).edit();
+
+        String msg = dbManagerTrust.selectConfigData();
+        L.d("msg:"+msg);
+        if (msg != null) {
+            Gson gson = new Gson();
+            ConfigBean configBean = gson.fromJson(msg,ConfigBean.class);
+            CaConfig.maxSpeed = 0;
+            if (configBean != null) {
+                if(configBean.getMaxSpeed() != 0){
+                    CaConfig.maxSpeed =  configBean.getMaxSpeed();
+                }
+                if(configBean.getCloseElectronicFenceTime() != 0){
+                    CaConfig.autoClose = configBean.getCloseElectronicFenceTime();
+                }
+                if(configBean.getDisableClickEndTime() != 0){
+                    CaConfig.DelayEndTime = configBean.getDisableClickEndTime();
+                }
+                L.d("config CaConfig.maxSpeed :"+CaConfig.maxSpeed +"|CaConfig.autoClose:"
+                +CaConfig.autoClose+"|CaConfig.DelayEndTime:"+CaConfig.DelayEndTime);
+            }
+        }else{
+            L.e("db config == null");
+        }
+
     }
 
     public abstract void iniView();
-
 
     public void requestPostCallBeack(String url, Map<String,Object> map, int type, boolean isNeed){
      post.Request(url,map,type,isNeed);
@@ -92,9 +124,6 @@ public abstract class BaseActivty extends AppCompatActivity {
 
     public void errorCallBeack(Object bean,int type){
 
-        if(type == CaConfig.loginTag){
-            showErrorToast(bean.toString(),3);
-        }
     }
 
 

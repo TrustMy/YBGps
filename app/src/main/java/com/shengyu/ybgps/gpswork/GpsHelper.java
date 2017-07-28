@@ -104,8 +104,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
     private boolean IsStopGps = false;
 
 
-
-    private int maxSpeed = 0;
+    private float maxSpeed = 0;
 
     private int Num = 0;
 
@@ -188,18 +187,20 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
 //        logger.info("GpsHelper init");
 
         handler = new GpsHandler(this);
-
+        /*
         // 读取超速报警阈值
         SharedPreferences prefs = context.getSharedPreferences("CommParams", Context.MODE_PRIVATE);
 
-        maxSpeed = prefs.getInt("maxSpeed", 0);//超速設置成 60
+        maxSpeed = prefs.getFloat("maxSpeed", CaConfig.maxSpeed);//超速設置成 60
+
 
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putInt("maxSpeed", maxSpeed);
+        editor.putFloat("maxSpeed", maxSpeed);
 
         editor.commit();
-
+        */
+        maxSpeed = CaConfig.maxSpeed;
 
         initGpsManager();
 
@@ -420,7 +421,6 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
                     Place);
             mainGpsHanddler.sendMessage(message);
             Log.i("lh", "当前坐标 location.getLatitude():" + location.getLatitude() + "location.getLongitude() :" + location.getLongitude());
-
         }
     };
 
@@ -644,7 +644,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
                     Place = bean.getCircleFences().get(i).getCircleName();//地点
 
                     L.d("GpsLoactionMaxTime:"+GpsLoactionMaxTime);
-                    if (GpsLoactionMaxTime >= 15)   //GPS 自动关闭
+                    if (GpsLoactionMaxTime >= CaConfig.autoClose)   //GPS 自动关闭
                     {
                         L.d("关闭");
                         IsStopGps = true;

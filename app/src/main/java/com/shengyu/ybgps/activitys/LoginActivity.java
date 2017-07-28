@@ -9,7 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.shengyu.ybgps.CaConfig;
@@ -37,7 +42,8 @@ public class LoginActivity extends BaseActivty {
     private String driveId;
     private String terminalId;
     public static boolean status = false;
-
+    private RelativeLayout mBg;
+    private  ImageView mLoading;
     int num = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,26 +73,43 @@ public class LoginActivity extends BaseActivty {
     @Override
     public void iniView() {
         userNameEt = (EditText) activity.findViewById(R.id.username);
-    }
+        mBg = (RelativeLayout) findViewById(R.id.register_bg);
+        mLoading = (ImageView) findViewById(R.id.register_loading);
 
+    }
+    @SuppressWarnings("ResourceType")
     public void onRegisterButton(View v){
         if(status){
 
         driveId = checkMessage(userNameEt,"司机id不能为空!");
+
+            mBg.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(context, R.animator.rotate);
+
+            LinearInterpolator lir = new LinearInterpolator();
+            animation.setInterpolator(lir);
+            animation.setRepeatCount(1000);
+            mLoading.startAnimation(animation);
         if(driveId != null){
             terminalId = checkTerminalId();
             if (terminalId != null) {
+
+
                 Map<String,Object> map = new WeakHashMap<>();
                 map.put("driverId",driveId);
                 map.put("imsi",terminalId);
                 requestPostCallBeack(CaConfig.login,map,1,CaConfig.needAdd);
             }else{
                 showErrorToast("请检查手机卡是否安装正确!",3);
+                mBg.setVisibility(View.GONE);
+                mLoading.clearAnimation();
             }
         }
 
         }else{
             T.showToast("请允许所有权限！");
+            mBg.setVisibility(View.GONE);
+            mLoading.clearAnimation();
         }
 
     }
@@ -116,6 +139,9 @@ public class LoginActivity extends BaseActivty {
 
     @Override
     public void successCallBeack(Object obj, int type) {
+        mBg.setVisibility(View.GONE);
+        mLoading.clearAnimation();
+
         if (obj != null) {
             if(type == CaConfig.loginTag){
                 if (terminalId != null && driveId != null) {
@@ -137,7 +163,14 @@ public class LoginActivity extends BaseActivty {
         }
     }
 
-
+    @Override
+    public void errorCallBeack(Object bean, int type) {
+        mBg.setVisibility(View.GONE);
+        mLoading.clearAnimation();
+        if(type == CaConfig.loginTag){
+            showErrorToast(bean.toString(),3);
+        }
+    }
 
     public void onExt(View view){
         finish();

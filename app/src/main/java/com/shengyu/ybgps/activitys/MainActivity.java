@@ -17,6 +17,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -244,7 +245,7 @@ public class MainActivity extends BaseActivty {
                     ToTime.setText(shi + "时" + fen + "分" + miao + "秒");
 
                     //小于5分钟 不能点  大于5分钟可以点击结束按钮
-                    if(fen+ (shi * 10) >= 1){
+                    if(fen+ (shi * 10) >= CaConfig.DelayEndTime){
                         End.setBackgroundResource(R.drawable.btn_off);
                         End.setClickable(true);
 
@@ -252,11 +253,15 @@ public class MainActivity extends BaseActivty {
                         End.setBackgroundResource(R.drawable.btn_on);
                         End.setClickable(false);
                     }
+
+
+
+
                     break;
 
                 case CaConfig.CloseFence:
                     if((Boolean) msg.obj){
-//                        StopGpsWork();
+                        StopGpsWork();
                     }
                     break;
 
@@ -340,8 +345,6 @@ public class MainActivity extends BaseActivty {
                     CaConfig.electronicFenceJsonBean = gson.fromJson(jsonList,ElectronicFenceJsonBean.class);
                     HttpIsOk = false;
                 }
-
-
                 if(CaConfig.electronicFenceJsonBean!= null){
 //                    isStartRanging = true;
 //                    promptTv.setText("未进入电子围栏");
@@ -474,22 +477,23 @@ public class MainActivity extends BaseActivty {
 
     public void onStartButton(View v){
         dialogTools.showSerialNumber(activity);
-
     }
 
 
 
     public void onStopButton(View v){
+        StopGpsWork();
+    }
+
+    private synchronized  void StopGpsWork() {
         if(reminder != null){
             reminder.stopReminder();
         }
         trustServer.endWork();
 
         HttpElectronicFence.setVisibility(View.INVISIBLE);
-        StopGpsWork();
-    }
 
-    private synchronized  void StopGpsWork() {
+
         isStartRanging = false;
 
         GpsTv.setVisibility(View.GONE);
@@ -614,7 +618,7 @@ public class MainActivity extends BaseActivty {
 
         GpsTv.setVisibility(View.GONE);
 
-        reminder = new Reminder(1,MainActivity.this,GpsHandler);//开始10分钟后 计算电子围栏
+        reminder = new Reminder(CaConfig.DelayEndTime,MainActivity.this,GpsHandler);//开始10分钟后 计算电子围栏
 
         reminder.startReminder();
 
@@ -668,7 +672,7 @@ public class MainActivity extends BaseActivty {
         }
 
         GpsHandler.sendEmptyMessageDelayed(CaConfig.delayEnd,CaConfig.DelayEndTime);
-        GpsHandler.sendEmptyMessageDelayed(CaConfig.StartAutoClose,CaConfig.Delay*10);
+//        GpsHandler.sendEmptyMessageDelayed(CaConfig.StartAutoClose,CaConfig.Delay*10);
 
         promptTv.setVisibility(View.VISIBLE);
         promptTv.setText("未启动电子围栏");
@@ -830,15 +834,19 @@ public class MainActivity extends BaseActivty {
             L.d("OnResume() and not in working status!");
         }
 
-
         promptTv.setVisibility(View.VISIBLE);
-        if(fen+(shi * 10) >= 10){
+        if(fen+(shi * 10) >= CaConfig.DelayEndTime){
             promptTv.setText("未进入电子围栏");
             CaConfig.isOpenAutoClose = true;
             isStartRanging = true;
+            L.d("未进入电子围栏");
         }else{
             promptTv.setText("未启动电子围栏");
+            CaConfig.isOpenAutoClose = false;
+            L.d("未启动电子围栏");
         }
+
+
         super.onResume();
     }
 
@@ -884,15 +892,11 @@ public class MainActivity extends BaseActivty {
                 Start.setClickable(true);
                 End.setBackgroundResource(R.drawable.btn_on);
                 End.setClickable(false);
-
             } else {
-
                 Start.setBackgroundResource(R.drawable.btn_on);
                 Start.setClickable(false);
                 End.setBackgroundResource(R.drawable.btn_off);
                 End.setClickable(true);
-
-
             }
 //            }
         }
@@ -907,5 +911,19 @@ public class MainActivity extends BaseActivty {
         }
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            select();
+            if (dbIsWorking == 1)
+            {
+                Toast.makeText(MainActivity.this, "目前处于工作状态,您无法退出...", Toast.LENGTH_LONG).show();
+                return true;
+            } else {
+                finish();
+            }
+        }
+        return false;
+    }
 }

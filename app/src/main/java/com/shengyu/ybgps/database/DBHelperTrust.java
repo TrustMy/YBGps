@@ -14,7 +14,10 @@ public class DBHelperTrust extends SQLiteOpenHelper {
     private static final String TRIP = "Trip";
 
     private static final String TableGps = "Gps";
+
     public static final String TIMESTAMP = "timeStamp";
+
+    public static final String ConfigTableName = "Config";
 
     private static final String CREATE_TRUST = "create table "+TableName+"(" +
             "id integer primary key autoincrement," +
@@ -34,6 +37,11 @@ public class DBHelperTrust extends SQLiteOpenHelper {
             "type" + " integer, " + "serialNo" + " text, " + "message" + " text)";
 
 
+    private static final String CREATE_CONFIG = "create table " + ConfigTableName +
+            " (" + TIMESTAMP +
+            "rawId integer primary key autoincrement," +
+            "data" + " text)";
+
     public DBHelperTrust(Context context) {
         super(context, "Trust.db", null, 1);
 
@@ -45,6 +53,7 @@ public class DBHelperTrust extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TRUST);
         sqLiteDatabase.execSQL(CREATE_TRIP);
         sqLiteDatabase.execSQL(CREATE_GPS);
+        sqLiteDatabase.execSQL(CREATE_CONFIG);
 
 
     }
