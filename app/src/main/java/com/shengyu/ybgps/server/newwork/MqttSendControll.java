@@ -149,7 +149,6 @@ public class MqttSendControll {
         String msg = new String(message.getPayload());
         L.d("arrived msg:"+msg);
         if(topic.equals("changan_yubei_1180")){
-
             if(!msg.isEmpty()){
                 L.d("arrived msg:"+msg);
                 String dbConfigData = dbManagerTrust.selectConfigData();

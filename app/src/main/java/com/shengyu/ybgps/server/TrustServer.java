@@ -248,6 +248,4 @@ public class TrustServer extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-
-
 }

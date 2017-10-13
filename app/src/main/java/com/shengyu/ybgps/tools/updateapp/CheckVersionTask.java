@@ -6,14 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
 
 import com.shengyu.ybgps.CaConfig;
 import com.shengyu.ybgps.R;
+import com.shengyu.ybgps.tools.L;
 
 import java.io.File;
 import java.io.InputStream;
@@ -327,17 +330,18 @@ public class CheckVersionTask implements Runnable {
 
         intent.setAction(Intent.ACTION_VIEW);
 
-        //执行的数据类型
-
-        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-
+        if (Build.VERSION.SDK_INT >= 24) {
+            Uri apkUri =
+                    FileProvider.getUriForFile(context, "com.shengyu.ybgps.fileprovider", file);
+            // 由于没有在Activity环境下启动Activity,设置下面的标签
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        }else{
+            //执行的数据类型
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        }
         context.startActivity(intent);
-
-
-
     }
-
-
-
-
 }

@@ -91,8 +91,8 @@ public abstract class BaseActivty extends AppCompatActivity {
 
     public abstract void iniView();
 
-    public void requestPostCallBeack(String url, Map<String,Object> map, int type, boolean isNeed){
-     post.Request(url,map,type,isNeed);
+    public void requestPostCallBeack(String url, Map<String,Object> map, int requestCode,int requestType,int requestHeader,String token){
+     post.Request(url,map,requestCode,requestType,requestHeader,token);
     }
 
     public void requestGetCallBeack(String url,int type){

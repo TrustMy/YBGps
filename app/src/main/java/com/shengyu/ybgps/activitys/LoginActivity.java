@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.shengyu.ybgps.CaConfig;
 import com.shengyu.ybgps.R;
 import com.shengyu.ybgps.database.DBHelperTrust;
@@ -25,6 +27,7 @@ import com.shengyu.ybgps.tools.AndroidPermissionTool;
 import com.shengyu.ybgps.tools.L;
 import com.shengyu.ybgps.tools.T;
 import com.shengyu.ybgps.tools.TrustSharedPreferences;
+import com.shengyu.ybgps.tools.bean.ErrorResultBean;
 import com.shengyu.ybgps.tools.bean.ResultBean;
 import com.shengyu.ybgps.tools.bean.TypeBean;
 import com.shengyu.ybgps.tools.bean.TypeGpsBean;
@@ -83,22 +86,25 @@ public class LoginActivity extends BaseActivty {
 
         driveId = checkMessage(userNameEt,"司机id不能为空!");
 
-            mBg.setVisibility(View.VISIBLE);
-            Animation animation = AnimationUtils.loadAnimation(context, R.animator.rotate);
 
-            LinearInterpolator lir = new LinearInterpolator();
-            animation.setInterpolator(lir);
-            animation.setRepeatCount(1000);
-            mLoading.startAnimation(animation);
+
         if(driveId != null){
             terminalId = checkTerminalId();
             if (terminalId != null) {
+                mBg.setVisibility(View.VISIBLE);
+                Animation animation = AnimationUtils.loadAnimation(context, R.animator.rotate);
 
+
+                LinearInterpolator lir = new LinearInterpolator();
+                animation.setInterpolator(lir);
+                animation.setRepeatCount(1000);
+                mLoading.startAnimation(animation);
 
                 Map<String,Object> map = new WeakHashMap<>();
                 map.put("driverId",driveId);
                 map.put("imsi",terminalId);
-                requestPostCallBeack(CaConfig.login,map,1,CaConfig.needAdd);
+                L.d("司机id:"+driveId+"|imsi:"+terminalId);
+                requestPostCallBeack(CaConfig.login,map,CaConfig.loginTag,post.PUT,post.HeaderUrlencoded,null);
             }else{
                 showErrorToast("请检查手机卡是否安装正确!",3);
                 mBg.setVisibility(View.GONE);
@@ -144,6 +150,7 @@ public class LoginActivity extends BaseActivty {
 
         if (obj != null) {
             if(type == CaConfig.loginTag){
+
                 if (terminalId != null && driveId != null) {
 
                     //修改登录状态
@@ -152,14 +159,26 @@ public class LoginActivity extends BaseActivty {
                     editdf.putBoolean("login", true);
                     editdf.commit();
 
-                    TrustSharedPreferences.setUserMesage(driveId,terminalId);
                     ResultBean bean = (ResultBean) obj;
-                    TrustSharedPreferences.setMeqttServer(bean.getMainserver(),
-                            bean.getBackupserver(),bean.getUsername(),bean.getPassword());
+                    if (bean.isStatus()) {
+                        L.d("登录成功");
+
+
+                    TrustSharedPreferences.setUserMesage(driveId,terminalId);
+
+                    TrustSharedPreferences.setMeqttServer(CaConfig.mqttServer,
+                            CaConfig.mqttServer,"mqtt_ca_user","mqtt_ca_user");
                     startActivity(new Intent(context,MainActivity.class));
                     finish();
+
+                    }else{
+
+                    }
+
+
                 }
             }
+
         }
     }
 

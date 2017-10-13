@@ -26,12 +26,12 @@ public class CAMqttCommHelper extends MqttCommHelper {
         String userName = TrustSharedPreferences.getMessage("Serever","username");
         String pwd = TrustSharedPreferences.getMessage("Serever","password");
         if(mainserver != null){
-            L.d("CAMqttCommHelper init");
-            host = "tcp://" + mainserver;
+            host =  mainserver;
             name = userName;
             passWord = pwd;
             clientId = CaConfig.terminalId!=0?CaConfig.terminalId+"": TimeTool.getSystemTimeDate()+"";
             topics  = new String[]{name};
+
 
             initMqtt();
         }

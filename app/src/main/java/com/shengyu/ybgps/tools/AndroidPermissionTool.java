@@ -26,21 +26,26 @@ public class AndroidPermissionTool extends Activity{
                 ActivityCompat.requestPermissions(activity,
                         new String[]{Manifest.permission.READ_PHONE_STATE ,
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.ACCESS_FINE_LOCATION},1);
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+                        },1);
             }else{
                 if(ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(activity,
                             new String[]{Manifest.permission.READ_PHONE_STATE ,
                                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.ACCESS_FINE_LOCATION},1);
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
                 }else {
                     if(ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED){
                         ActivityCompat.requestPermissions(activity,
                                 new String[]{Manifest.permission.READ_PHONE_STATE ,
                                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        Manifest.permission.ACCESS_FINE_LOCATION},1);
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
                     }else{
                         LoginActivity.status = true;
                         L.d("permission success");

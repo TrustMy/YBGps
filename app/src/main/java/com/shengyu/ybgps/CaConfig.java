@@ -42,7 +42,7 @@ public class CaConfig {
 
     public static float version;
 
-    public static float maxSpeed = 60;//超速60
+    public static float maxSpeed = 80;//超速80
 
     public static ElectronicFenceJsonBean electronicFenceJsonBean;
     public static String tag;
@@ -94,12 +94,13 @@ public class CaConfig {
     topicTrip = "data/trip";
 
 
-    public static  String login = "http://180.168.194.98:7888/CAWebserver-0.1/registry/reg";
-    public static  String updateApp = "http://139.196.229.233/changan/update.xml";
+    public static  String login = "http://139.196.229.233:8080/CAWebserver-0.1/rest/drivers/register/";
+
+    public static  String updateApp = "http://139.196.229.233/changan/update_yh.xml";
     public static  String url_electronic_fence_json = "http://carlinkcn.com:8080/CAWebserver-0.1/rest/circleFences";
     public static  String uir_set_version = "http://139.196.229.233:8080/CAWebserver-0.1/rest/drivers/updateAppVersion/";
 
-
+    public static  String mqttServer = "tcp://139.196.229.233:9001";
 
     public static final String SharedPreferencesUser = "UserMsg";
     public static final String SharedPreferencesServer = "Serever";

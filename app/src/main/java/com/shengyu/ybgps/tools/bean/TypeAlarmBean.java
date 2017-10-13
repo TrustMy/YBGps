@@ -23,9 +23,9 @@ public class TypeAlarmBean extends TypeBean {
     private String gpsTime;
     private double speed;
     private long terminalId;
-    private int bear;
+    private float bear;
     private long serialNo;
-    private int alt;
+    private double alt;
     private int driver;
     private double lat;
     private int type;
@@ -99,7 +99,7 @@ public class TypeAlarmBean extends TypeBean {
         return terminalId;
     }
 
-    public int getBear() {
+    public float getBear() {
         return bear;
     }
 
@@ -107,7 +107,7 @@ public class TypeAlarmBean extends TypeBean {
         return serialNo;
     }
 
-    public int getAlt() {
+    public double getAlt() {
         return alt;
     }
 

@@ -28,7 +28,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class MqttCommHelper {
     protected MqttAndroidClient client;
     protected MqttConnectOptions conOpt;
-
     protected MqttSendControll mqttSendControll;
 
     private final int initConnectionError = 0x001,connectionError = 0x002;
@@ -75,7 +74,7 @@ public class MqttCommHelper {
             clearHandler();
             if(!initMqttStatus){
                 initMqttStatus= true;
-                L.d("mqtt config :"+host+"|name:"+name+"|password:"+passWord);
+                L.d("mqtt config :"+host+"|name:"+name+"|password:"+passWord+"|clientId:"+clientId);
                 // 服务器地址（协议+地址+端口号）
                 String uri = host;
                 client = new MqttAndroidClient(context, uri, clientId);

@@ -391,6 +391,7 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
                 map.put("EngineStatus",EngineStatus.ACC_ON.value());
                 map.put("gpsTime",TimeTool.getGPSNumTime(gpsLocation.getTime() ));
                 SaveDate(CaConfig.typeGPS,TimeTool.getSystemTimeDate(),map);
+
             }
 
 
@@ -766,7 +767,6 @@ public class GpsHelper implements Runnable, JsonBeanInterface {
 
 
     public void SaveDate(int type,long serialNumber,Map<String,Object> data){
-
         dbManagerTrust.addGps(type,serialNumber,new JSONObject(data).toString());
     }
 

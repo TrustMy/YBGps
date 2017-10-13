@@ -9,25 +9,25 @@ public class ErrorResultBean {
 
     /**
      * status : false
-     * message : 该司机已注册
+     * reason : 该司机已注册
      */
 
     private boolean status;
-    private String message;
+    private String reason;
+
+    public boolean isStatus() {
+        return status;
+    }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getReason() {
+        return reason;
     }
 
-    public boolean getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

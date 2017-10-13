@@ -784,7 +784,7 @@ public class MainActivity extends BaseActivty {
             // TODO: 2017/7/17
 //            post.postUrl(context.getResources().getString(R.string.uir_set_version),CaConfig
 //                    .Version,map);
-            requestPostCallBeack(CaConfig.uir_set_version,map,CaConfig.Version,CaConfig.noAdd);
+            requestPostCallBeack(CaConfig.uir_set_version,map,CaConfig.Version,post.POST,post.HeaderJson,null);
 
         } catch (Exception e) {
             e.printStackTrace();

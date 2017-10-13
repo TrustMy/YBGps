@@ -24,9 +24,9 @@ public class TypeGpsBean extends TypeBean {
     private String gpsTime;
     private double speed;
     private long terminalId;
-    private double bear;
+    private float bear;
     private long serialNo;
-    private int alt;
+    private double alt;
     private int driver;
     private double lat;
     private int type;
@@ -48,7 +48,7 @@ public class TypeGpsBean extends TypeBean {
         this.terminalId = terminalId;
     }
 
-    public void setBear(double bear) {
+    public void setBear(float bear) {
         this.bear = bear;
     }
 
@@ -100,7 +100,7 @@ public class TypeGpsBean extends TypeBean {
         return serialNo;
     }
 
-    public int getAlt() {
+    public double getAlt() {
         return alt;
     }
 
